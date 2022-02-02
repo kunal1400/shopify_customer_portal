@@ -6,7 +6,7 @@ import {
   ApolloLink
 } from "@apollo/client";
 
-import Login from './Customer/Login';
+import ThemeLayout from './Theme-Layout';
 import './App.css';
 
 const httpLink = new HttpLink({
@@ -31,7 +31,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Login />
+      <ThemeLayout />
     </ApolloProvider>    
   );
 }

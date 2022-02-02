@@ -1,7 +1,9 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import Cookies from 'universal-cookie';
+import { useNavigate } from "react-router-dom";
 import {GET_CUSTOMER_ACCESS_TOKEN} from './API';
+import './style.css';
 
 const cookies = new Cookies();
 
@@ -46,9 +48,7 @@ function Login( props ) {
 
     let [getAccessToken, {loading, data, error}] = useMutation(GET_CUSTOMER_ACCESS_TOKEN)
 
-    // useEffect(() => {
-    //     console.log( customerData, "Customer Filled Data" )        
-    // }, [customerData])
+    let navigate = useNavigate();
     
     const handleInput = ( data ) => {
         let userInputData = {...customerData, ...data}        
@@ -75,8 +75,8 @@ function Login( props ) {
             getAccessToken({
                 variables: { 
                     input: {
-                        email:"priyankajain@mailinator.com",
-                        password:"123456789"
+                        email: customerData.customer_email,
+                        password: customerData.customer_password
                     }
                 }
             })
@@ -84,15 +84,22 @@ function Login( props ) {
                return response.data.customerAccessTokenCreate.customerAccessToken
             })
             .then((data) => {
-                console.log(data, "accessToken")
-                var date = new Date( data.expiresAt );                
-                // console.log(date.toString(), "local expire date")
+                if( data && data.expiresAt ) {
+                    var date = new Date( data.expiresAt );                
+                    // console.log(date.toString(), "local expire date")
 
-                // Setting user access token in cookie with expiration date in UTC
-                cookies.set("_shopify_current_user_access_token", data.accessToken, { 
-                    path: '/' ,
-                    expires: new Date(data.expiresAt)
-                })
+                    // Setting user access token in cookie with expiration date in UTC
+                    cookies.set("_shopify_current_user_access_token", data.accessToken, { 
+                        path: '/' ,
+                        expires: new Date(data.expiresAt)
+                    })
+
+                    // After login redirect user to home page
+                    navigate("/")
+                }
+                else {
+                    navigate("/signup?error_msg=1")
+                }
             })
         }
     }
@@ -100,7 +107,7 @@ function Login( props ) {
     return(
         <div className="row h-100 w-75 mx-auto align-content-center">            
             <form onSubmit={handleSubmit} className="p-3 bg-light">
-                <h2 className="mb-3 text-center">Shopify Login Form</h2>                
+                <h2 className="mb-3 text-center">Shopify Login Form</h2>
                 <div className="col-12 mb-3 form-floating">                    
                     <Input 
                         type="email" 
@@ -127,13 +134,11 @@ function Login( props ) {
                         className="floating-label"
                         >Password</label>
                 </div>
-                <div className="col-12 mb-3">
-                    {loading ? '<p>Loading</p>' : ''}
-                    {error ? `<p>Submission error! ${error.message}</p>` : ''}
-                </div>
                 <div className="col-12">
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary">Submit</button>                    
                 </div>
+                {loading ? <div className="col-12 text-center text-success mt-3">Loading...</div> : ''}
+                {error ? <div className="col-12 text-center text-error mt-3">Submission error! {error.message}</div> : ''}                
             </form>
         </div>
     )
