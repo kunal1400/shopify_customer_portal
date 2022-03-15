@@ -10,23 +10,26 @@ let cookie = new Cookies();
  * 
  * This component is not accepting any props and no state update so it will not update
  */
-function Navigation() {    
+function Navigation() {
     let isUserLogedIn = cookie.get("_shopify_current_user_access_token");
     let navigate = useNavigate();
 
     const logOut = () => {
-        cookie.remove("_shopify_current_user_access_token", { 
+        cookie.remove("_shopify_current_user_access_token", {
             path: '/'
         })
         navigate("/")
     }
 
-    return(
+    return (
         <nav className="navbar navbar-expand-lg">
-            <div className="container-fluid">
-                <Link to="/" className="navbar-brand">Shopify Portal</Link>
-                <button 
-                    type="button" 
+            <div className="container border-bottom border-dark">
+                <Link to="/" className="navbar-brand text-dark">
+                    <div className="mb-2"><img src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/BigTurntables-FinalLogo-Black-small-circle_380x.jpg" className="img-fluid" /></div>
+                    <div>BigT Account</div>
+                </Link>
+                <button
+                    type="button"
                     className="navbar-toggler"
                     data-bs-toggle="collapse"
                     data-bs-target="#navigation"
@@ -39,24 +42,24 @@ function Navigation() {
                 <div className="collapse navbar-collapse" id="navigation">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item">
-                            <Link to="/home" className="nav-link">Home</Link>                           
+                            <Link to="/home" className="nav-link">Home</Link>
                         </li>
-                        <li className="nav-item">                            
+                        <li className="nav-item">
                             {
-                                !isUserLogedIn ? <Link to="/signup" className="nav-link">Sign Up</Link> : ''
+                                !isUserLogedIn ? <Link to="/signup" className="nav-link">Create Your BigT Account</Link> : ''
                             }
-                        </li> 
-                        <li className="nav-item">                            
+                        </li>
+                        <li className="nav-item">
                             {
-                                isUserLogedIn ? 
-                                    <a href="#" onClick={logOut} className="nav-link">Logout</a> 
-                                    : 
+                                isUserLogedIn ?
+                                    <a href="#" onClick={logOut} className="nav-link">Logout</a>
+                                    :
                                     <Link to="/login" className="nav-link">Login</Link>
                             }
-                        </li>                        
+                        </li>
                     </ul>
                 </div>
-            </div>            
+            </div>
         </nav>
     )
 }
