@@ -8,6 +8,11 @@ export const GET_CUSTOMER_ACCESS_TOKEN = gql`
                 accessToken
                 expiresAt
             }
+            customerUserErrors {
+                code
+                field
+                message
+            }
         }
     }  
 `;

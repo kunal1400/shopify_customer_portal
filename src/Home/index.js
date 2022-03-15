@@ -4,13 +4,13 @@ import { GET_SHOP_INFO } from "./API";
 import { useEffect } from "react/cjs/react.development";
 
 function Home() {
-    let {loading, error, data, refetch, networkStatus} = useQuery( GET_SHOP_INFO, {
+    let { loading, error, data, refetch, networkStatus } = useQuery(GET_SHOP_INFO, {
         // pollInterval: 1000,
         notifyOnNetworkStatusChange: true
     });
 
-    if( networkStatus == NetworkStatus.refetch ) {
-        return(
+    if (networkStatus == NetworkStatus.refetch) {
+        return (
             <div className="container">
                 <div className="row">
                     Refetching....
@@ -19,7 +19,7 @@ function Home() {
         )
     }
 
-    if( loading ) {
+    if (loading) {
         return (
             <div className="container">
                 <div className="row">
@@ -31,7 +31,7 @@ function Home() {
         )
     }
 
-    if( error ) {
+    if (error) {
         return (
             <div className="container">
                 <div className="row">
@@ -46,24 +46,14 @@ function Home() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-12 mt-5">
+                {/* <div className="col-12 mt-5">
                     <button 
                         className="btn btn-secondary"
                         onClick={() => refetch()}
                     >Refetch</button>
-                </div>
+                </div> */}
                 <div className="col-12 mt-5">
-                    <ul className="list-group">
-                        <li className="list-group-item">Domain - 
-                            { 
-                                data && data.shop.primaryDomain.url ? 
-                                    <a target="_blank" href={data.shop.primaryDomain.url}>{data.shop.primaryDomain.url}</a> 
-                                : 
-                                '' 
-                            }
-                        </li>
-                        <li className="list-group-item">Description - {data && data.description ? data.description : '' }</li>
-                    </ul>
+                    <p>This is the Shopify customer portal for Domain - {data && data.shop.primaryDomain.url ? <a target="_blank" href={data.shop.primaryDomain.url}>{data.shop.primaryDomain.url}</a> : ''}. {data && data.description ? data.description : ''}</p>
                 </div>
             </div>
         </div>

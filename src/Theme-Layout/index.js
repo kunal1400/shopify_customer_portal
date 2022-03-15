@@ -5,14 +5,14 @@ import Home from "../Home";
 import Signup from "../Signup";
 
 function Layout() {
-    return(
+    return (
         <BrowserRouter>
             <Navigation />
             <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Home />} />
+                <Route exact path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/signup" element={<Signup/>} />
+                <Route exact path="/signup" element={<Signup />} />
             </Routes>
         </BrowserRouter>
     )
