@@ -1,12 +1,11 @@
 import { useMutation } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import Cookies from 'universal-cookie';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GET_CUSTOMER_ACCESS_TOKEN } from './API';
 import { AlertMsg, SuccessMsg } from "../common-components/alert";
+import { FormLogo } from "../common-components/logos";
+import { saveCustomerToken } from "../utils";
 import './style.css';
-
-const cookies = new Cookies();
 
 /**
  * 
@@ -94,13 +93,7 @@ function Login(props) {
                     }
                 }
                 else if (customerAccessToken) {
-                    console.log(customerAccessToken, "Customer successfully login")
-                    var date = new Date(customerAccessToken.expiresAt);
-                    // Setting user access token in cookie with expiration date in UTC
-                    cookies.set("_shopify_current_user_access_token", customerAccessToken.accessToken, {
-                        path: '/',
-                        expires: new Date(customerAccessToken.expiresAt)
-                    })
+                    saveCustomerToken(customerAccessToken)
                     // After login redirect user to home page
                     navigate("/")
                 }
@@ -112,9 +105,9 @@ function Login(props) {
     }
 
     return (
-        <div className="row h-100 w-75 mx-auto align-content-center">
-            <form onSubmit={handleSubmit} className="p-3 bg-light">
-                <h2 className="mb-3 text-center">Shopify Login Form</h2>
+        <div className="row">
+            <form onSubmit={handleSubmit} className="p-3 w-50 mx-auto">
+                <FormLogo />
                 <div className="col-12 mb-3 form-floating">
                     <Input
                         type="email"
@@ -142,11 +135,16 @@ function Login(props) {
                     >Password</label>
                 </div>
                 {errorMsg ? <AlertMsg>{errorMsg}</AlertMsg> : ''}
-                <div className="col-12">
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="col-12 text-center">
+                    <button type="submit" className="btn btn-primary">Log In</button>
                 </div>
                 {loading ? <div className="col-12 text-center text-success mt-3">Loading...</div> : ''}
                 {error ? <div className="col-12 text-center text-error mt-3">Submission error! {error.message}</div> : ''}
+                <hr />
+                <div className="col-12 text-center">
+                    <p><Link to="/forgot-password">Forgot BigT ID or password?</Link></p>
+                    <p>Don't have an account yet? <Link to="/signup">join now ></Link></p>
+                </div>
             </form>
         </div>
     )

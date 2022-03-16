@@ -3,6 +3,7 @@ import Navigation from "../Navigation";
 import Login from "../Login";
 import Home from "../Home";
 import Signup from "../Signup";
+import SectionWithSidebar from "../Customer";
 
 function Layout() {
     return (
@@ -13,6 +14,7 @@ function Layout() {
                 <Route exact path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
                 <Route exact path="/signup" element={<Signup />} />
+                <Route path="/customer/:section" element={<SectionWithSidebar />} />
             </Routes>
         </BrowserRouter>
     )
