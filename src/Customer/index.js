@@ -1,34 +1,21 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { DefaultSidebar } from "./Sidebars";
+import { Sidebar, DefaultSidebarItems, ItemsUploadedSidebarItems } from "./Sidebars";
+import { Orders } from "./Orders";
+import { ItemUpload } from "../Items/ItemsUploaded/ItemUpload";
 
 export default function SectionWithSidebar(props) {
     let { section } = useParams();
 
-    // Default sidebar items to show
-    let sidebarItems = [
-        { label: 'Profile Info', link: "/customer/profile-info" },
-        { label: 'Contact Info', link: "/customer/contact-info" },
-        { label: 'Password', link: "/customer/password" },
-        { label: 'Advanced Settings', link: "/customer/advanced-settings" },
-        { label: 'Billing Info', link: "/customer/billing-info" },
-        { label: 'Order History', link: "/customer/order-history" }
-    ];
-
-    if (section == 'items-uploaded') {
-        sidebarItems = [
-            { label: 'Items Uploaded', link: "/customer/items-uploaded" },
-            { label: 'All Items', link: "/customer/all-items" }
-        ]
-    }
-    console.log(section, sidebarItems, "props")
-
-    return <div className="container">
+    return <div className="container" id="customer-section">
         <div className="row">
-            <div className="col-sm-4">
-                <DefaultSidebar items={sidebarItems} />
+            <div className="col-sm-3">
+                {section == 'items-uploaded' ? <Sidebar items={ItemsUploadedSidebarItems} /> : <Sidebar items={DefaultSidebarItems} />}
             </div>
-            <div className="col-sm-8">Component</div>
+            <div className="col-sm-9">
+                {section == 'items-uploaded' ? <ItemUpload /> : ''}
+                {section == 'order-history' ? <Orders /> : ''}
+            </div>
         </div>
     </div>
 }

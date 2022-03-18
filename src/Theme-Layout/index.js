@@ -4,6 +4,7 @@ import Login from "../Login";
 import Home from "../Home";
 import Signup from "../Signup";
 import SectionWithSidebar from "../Customer";
+import Footer from "../Footer";
 
 function Layout() {
     return (
