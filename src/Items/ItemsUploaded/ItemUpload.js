@@ -1,5 +1,6 @@
 import React from "react";
-import Dropzone from "../../common-components/FileUpload/Dropzone";
+// import Dropzone from "../../common-components/FileUpload/Dropzone";
+import { BootstrapFileUpload } from "../../common-components/BootstrapFileUpload";
 
 const ItemCategories = [
     "Automotive & Powersports",
@@ -36,7 +37,8 @@ export const ItemUpload = () => {
             </div>
             <div className="mb-4">
                 <h6><b>Select Photos</b></h6>
-                <Dropzone />
+                {/* <Dropzone /> */}
+                <BootstrapFileUpload />
             </div>
             <div className="text-end mb-5">
                 <button className="btn btn-primary">Create Item & Upload</button>

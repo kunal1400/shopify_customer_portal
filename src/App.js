@@ -7,13 +7,14 @@ import {
 } from "@apollo/client";
 
 import ThemeLayout from './Theme-Layout';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const httpLink = new HttpLink({
   uri: `https://${process.env.REACT_APP_STORE_NAME}.myshopify.com/api/2022-01/graphql.json`
 })
 
-const authLink = new ApolloLink((operation, forward) => {  
+const authLink = new ApolloLink((operation, forward) => {
   operation.setContext({
     headers: {
       'X-Shopify-Storefront-Access-Token': `${process.env.REACT_APP_API_STORE_FRONT_TOKEN}`
@@ -32,7 +33,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <ThemeLayout />
-    </ApolloProvider>    
+    </ApolloProvider>
   );
 }
 
