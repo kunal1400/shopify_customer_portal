@@ -26,7 +26,6 @@ function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(customerData, "customerData")
         try {
             // Calling Create Customer API
             const responseData = await createCustomer({ variables: { input: customerData } })
