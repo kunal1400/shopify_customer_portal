@@ -44,6 +44,9 @@ const uploadBase64 = (baseSixtyFourImage, imageName, contentType) => {
     })
 }
 
+/**
+ * Listing key
+ */
 const listKeys = (keyPrefix) => {
     return new Promise((resolve, reject) => {
         instance.listObjectsV2({ Prefix: `${keyPrefix}/` }, function (err, data) {

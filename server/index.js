@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 const port = process.env.BACKEND_PORT
 
-
 // Custom Routes
 const s3 = require('./routes/upload_file');
 
@@ -56,6 +55,40 @@ app.post('/upload_file', async (req, res) => {
     } catch (err) {
         res.status(500).send(err);
     }
+})
+
+// Getting files in the folder
+app.get('/files', async (req, res) => {
+    let { folder } = req.query
+    if (!folder) {
+        res.send({
+            status: false,
+            msg: "Folder is required"
+        })
+    }
+    else {
+        // Calling file upload function
+        let s3response = await s3.getFolderFiles(folder);
+
+        // Sending response
+        res.send({
+            status: true,
+            data: s3response
+        });
+    }
+
+    // try {
+    //     if (!req.files) {
+    //         res.send({
+    //             status: false,
+    //             message: 'No file uploaded'
+    //         });
+    //     } else {
+
+    //     }
+    // } catch (err) {
+    //     res.status(500).send(err);
+    // }
 })
 
 app.listen(port, () => {

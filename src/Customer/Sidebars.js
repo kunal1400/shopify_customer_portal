@@ -16,6 +16,6 @@ export const DefaultSidebarItems = [
 ]
 
 export const ItemsUploadedSidebarItems = [
-    { label: 'Items Uploaded', link: "/customer/items-uploaded" },
+    { label: 'Upload Item', link: "/customer/items-uploaded" },
     { label: 'All Items', link: "/customer/all-items" }
 ]

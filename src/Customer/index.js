@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { Sidebar, DefaultSidebarItems, ItemsUploadedSidebarItems } from "./Sidebars";
 import { Orders } from "./Orders";
+import { AllItems } from "../Items/AllItems";
 import { ItemUpload } from "../Items/AddItem/AddItem";
 
 export default function SectionWithSidebar(props) {
@@ -15,6 +16,7 @@ export default function SectionWithSidebar(props) {
             <div className="col-sm-9">
                 {section === 'items-uploaded' ? <ItemUpload /> : ''}
                 {section === 'order-history' ? <Orders /> : ''}
+                {section === 'all-items' ? <AllItems /> : ''}
             </div>
         </div>
     </div>

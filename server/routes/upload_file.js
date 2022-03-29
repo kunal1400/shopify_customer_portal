@@ -8,6 +8,15 @@ const upload_file = async (file, folderName) => {
     }
 }
 
+const getFolderFiles = async (folderName) => {
+    try {
+        return await s3.listKeys(folderName);
+    } catch (err) {
+        return err;
+    }
+}
+
 module.exports = {
-    upload_file
+    upload_file,
+    getFolderFiles
 }

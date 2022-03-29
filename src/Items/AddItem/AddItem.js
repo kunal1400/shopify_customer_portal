@@ -24,46 +24,6 @@ const ItemCategories = [
     "Tools & Home Improvement"
 ]
 
-// // Data for checkout
-// const dataForCheckoutt = {
-//     allowPartialAddresses: true,
-//     buyerIdentity: {
-//         countryCode: "US"
-//     },
-//     customAttributes: {
-//         key: "greet",
-//         value: "hello"
-//     },
-//     email: "kunal1@mailinator.com",
-//     lineItems: [{
-//         quantity: 1,
-//         variantId: "gid://shopify/ProductVariant/42521901629668"
-//     }],
-//     note: "",
-//     shippingAddress: {
-//         address1: "123 Test Street",
-//         city: "New York",
-//         country: "USA",
-//         firstName: "Kunal",
-//         lastName: "Malviya",
-//         phone: "+16135551111",
-//         province: "NY",
-//         zip: "10011"
-//     }
-// }
-
-// Data for creating checkout
-const dataForCheckout = {
-    lineItems: [{
-        customAttributes: [{
-            key: "greet",
-            value: "hello"
-        }],
-        quantity: 1,
-        variantId: `gid://shopify/ProductVariant/${process.env.REACT_APP_IMAGE_ITEM_VARIANT_ID}`
-    }]
-}
-
 export const ItemUpload = () => {
     // Form data
     let [imageFormData, setFormData] = useState({
@@ -121,7 +81,7 @@ export const ItemUpload = () => {
                                     },
                                     {
                                         key: '_user_uploaded_files',
-                                        value: uploadedFiles.join(",")
+                                        value: JSON.stringify(uploadedFiles)
                                     }
                                 ],
                                 quantity: 1,
@@ -146,18 +106,18 @@ export const ItemUpload = () => {
                         }
                     });
 
-                    // Completing checkout free
-                    await checkoutCompleteFree({
-                        variables: {
-                            checkoutId: checkout.id
-                        }
-                    })
+                    // // Completing checkout free
+                    // await checkoutCompleteFree({
+                    //     variables: {
+                    //         checkoutId: checkout.id
+                    //     }
+                    // })
 
-                    // // Redirecting to the checkout
-                    // setTimeout(() => {
-                    //     alert("Redirecting to payment page")
-                    //     window.location.href = checkout.webUrl
-                    // }, 2000)
+                    // Redirecting to the checkout
+                    setTimeout(() => {
+                        alert("Redirecting to payment page")
+                        window.location.href = checkout.webUrl
+                    }, 2000)
                 }
             } catch (err) {
                 console.log(err, "err+err")
