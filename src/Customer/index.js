@@ -11,7 +11,7 @@ export default function SectionWithSidebar(props) {
     return <div className="container" id="customer-section">
         <div className="row">
             <div className="col-sm-3">
-                {section === 'items-uploaded' ? <Sidebar items={ItemsUploadedSidebarItems} /> : <Sidebar items={DefaultSidebarItems} />}
+                {section === 'items-uploaded' || section === 'all-items' ? <Sidebar items={ItemsUploadedSidebarItems} /> : <Sidebar items={DefaultSidebarItems} />}
             </div>
             <div className="col-sm-9">
                 {section === 'items-uploaded' ? <ItemUpload /> : ''}

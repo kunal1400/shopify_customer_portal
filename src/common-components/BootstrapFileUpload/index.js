@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
-import fileinput from 'bootstrap-fileinput';
 import 'bootstrap-fileinput/css/fileinput.min.css';
 import PropTypes from 'prop-types';
+import fileinput from 'bootstrap-fileinput';
 
 // Default Time for folder
 const uploadStartTime = new Date().toUTCString().replace(/,/g, '').replace(/ /g, "_").replace(/:/g, "_")
@@ -15,7 +15,9 @@ const fileInputConfig = {
     maxFileCount: 72,
     overwriteInitial: false,
     initialPreviewAsData: true,
+    // initialPreviewCount: true,
     showUpload: true,
+    // deleteUrl: '/localhost/avatar/delete',
     uploadExtraData: function (previewId, index) {
         return {
             _uploading_started_at: uploadStartTime
@@ -23,15 +25,34 @@ const fileInputConfig = {
     },
 }
 
-const BootstrapFileUpload = ({ filebatchuploadcomplete }) => {
-    let fileInput = useRef();
+const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview }) => {    
+    let inputFileRef = useRef();
     let [s3ServerUrls, setS3ServerUrls] = useState([]);
+    
+    const setInitialPreview = () => {
+        $(inputFileRef.current).fileinput('destroy').fileinput(fileInputConfig);
+    }
+
+    // Initial Preview
+    if(initialPreview instanceof Array && initialPreview.length > 0) {
+        fileInputConfig.showPreview = true;
+        
+        fileInputConfig.initialPreview = initialPreview.map((item, index) => `${process.env.REACT_APP_BUCKET_URL}/${item.Key}`);
+        fileInputConfig.initialPreviewConfig = initialPreview.map((item, index) => ({
+            caption: item.ETag,
+            key: item.key,
+            url: '/localhost/avatar/delete'
+        }));
+        
+        console.log(fileInputConfig)
+        // Setting initial preview
+        setInitialPreview()
+    }
 
     // componentDidMount 
     useEffect(() => {
-        $(fileInput.current).fileinput(
-            fileInputConfig
-        ).on('fileloaded', function (event, file, previewId, fileId, index, reader) {
+        $(inputFileRef.current).fileinput(fileInputConfig)
+        .on('fileloaded', function (event, file, previewId, fileId, index, reader) {
             // console.log("file loaded")
         }).on('fileclear', function (event) {
             // console.log("file cleared")
@@ -78,11 +99,10 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete }) => {
         }).on('filebatchuploadsuccess', function (event, data) {
             // console.log('File Batch Upload Success', event, data);
         })
-
-    }, [])
+    }, [initialPreview])
 
     return <div>
-        <input type="file" multiple name="customers_uploaded_files[]" className='fileInput' ref={fileInput} />
+        <input type="file" multiple name="customers_uploaded_files[]" className='fileInput' ref={inputFileRef} />
     </div>
 }
 
