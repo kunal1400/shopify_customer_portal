@@ -11,12 +11,14 @@ import getS3FolderPath from "../../common-components/getS3PathFromLineItemProper
  */
 const ListHtml = ({ lineItems, orderId, orderName, processedAt, fulfillmentStatus }) => {
     return lineItems.edges.map((item, i) => {
-
         // custom attribute creation
         let s3FolderPath = null;
+        let folderName = null;
         const customAttributes = item.node.customAttributes.map((a, i) => {
-            if (a.key === '_uploading_started_at')
+            if (a.key === '_uploading_started_at') {
                 s3FolderPath = getS3FolderPath(a.value) + '/' + a.value;
+                folderName = a.value;
+            }
 
             if (a.key !== '_user_uploaded_files')
                 return <div><small key={i}>{a.key}: {a.value}</small></div>
@@ -26,7 +28,7 @@ const ListHtml = ({ lineItems, orderId, orderName, processedAt, fulfillmentStatu
         return <div key={i} className="d-flex justify-content-between align-items-center border p-2 mb-3">
             <div className="text-secondary">{orderName}</div>
             <div>
-                <div>{item.node.title} x {item.node.quantity}</div>
+                {/* <div>{item.node.title} x {item.node.quantity}</div> */}
                 <pre>{customAttributes}</pre>
             </div>
             <div>
@@ -34,7 +36,7 @@ const ListHtml = ({ lineItems, orderId, orderName, processedAt, fulfillmentStatu
                 <small>{moment(processedAt).format("dddd, MMMM Do YYYY, h:mm:ss a")}</small>
             </div>
             <div>
-                <Link to={`/edit-item?orderId=${orderId}&folderPath=${s3FolderPath}`}>Add/Edit Images</Link>
+                <Link to={`/edit-item?orderId=${orderId}&folderPath=${s3FolderPath}&folderName=${folderName}`}>Add/Edit Images</Link>
             </div>
         </div>
     })
@@ -44,8 +46,8 @@ const ListHtml = ({ lineItems, orderId, orderName, processedAt, fulfillmentStatu
  * List of orders UI
  */
 const OrderList = ({ orders }) => {
-    return orders.map((o, i) => <ListHtml
-        key={i}
+    return orders.map((o, j) => <ListHtml
+        key={j}
         lineItems={o.node.lineItems}
         orderId={o.node.id}
         orderName={o.node.name}
@@ -63,7 +65,7 @@ export const AllItems = () => {
     const { loading, error, data } = useQuery(CUSTOMER_ORDERS, {
         variables: {
             input: customerToken,
-            ordersToShow: 2
+            ordersToShow: 250
         }
     });
 

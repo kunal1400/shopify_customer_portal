@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import BootstrapFileUpload from "../../common-components/BootstrapFileUpload";
 import { CHECKOUT_CREATE } from '../../Checkout/createCheckout';
 import { CHECKOUT_CUSTOMER_ASSOCIATE } from '../../Checkout/associateCustomer';
-import { getCustomerToken } from '../../utils';
+import { getCustomerToken, dateWiseFolder, currentTime } from '../../utils';
 import { CHECKOUT_COMPLETE_FREE } from '../../Checkout/checkoutCompleteFree';
 
 const ItemCategories = [
@@ -106,16 +106,9 @@ export const ItemUpload = () => {
                         }
                     });
 
-                    // // Completing checkout free
-                    // await checkoutCompleteFree({
-                    //     variables: {
-                    //         checkoutId: checkout.id
-                    //     }
-                    // })
-
                     // Redirecting to the checkout
                     setTimeout(() => {
-                        alert("Redirecting to payment page")
+                        // alert("Redirecting to payment page")
                         window.location.href = checkout.webUrl
                     }, 2000)
                 }
@@ -146,8 +139,7 @@ export const ItemUpload = () => {
             </div>
             <div className="mb-4">
                 <h6><b>Select Photos</b></h6>
-                {/* <Dropzone /> */}
-                <BootstrapFileUpload filebatchuploadcomplete={afterUpload} />
+                <BootstrapFileUpload filebatchuploadcomplete={afterUpload} uploadStartTime={dateWiseFolder()+'/'+currentTime} />
             </div>
         </form>
     </>

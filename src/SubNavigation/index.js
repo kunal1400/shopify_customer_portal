@@ -7,7 +7,7 @@ function SubNavigation() {
             <ul className="nav mb-3">
                 <Link to="/customer/items-uploaded" className="nav-link">Items Uploaded</Link>
                 <Link to="/customer/order-history" className="nav-link">Order History</Link>
-                <Link to="/customer/notification" className="nav-link">Notifications</Link>
+                {/* <Link to="/customer/notification" className="nav-link">Notifications</Link> */}
             </ul>
         </div>
     </div>

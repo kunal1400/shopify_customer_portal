@@ -142,7 +142,7 @@ function Login(props) {
                 {error ? <div className="col-12 text-center text-error mt-3">Submission error! {error.message}</div> : ''}
                 <hr />
                 <div className="col-12 text-center">
-                    <p><Link to="/forgot-password">Forgot BigT ID or password?</Link></p>
+                    <p><Link to="/forgot-password">Forgot BigTT ID or password?</Link></p>
                     <p>Don't have an account yet? <Link to="/signup">join now ></Link></p>
                 </div>
             </form>

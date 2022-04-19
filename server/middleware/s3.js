@@ -69,13 +69,8 @@ const listKeys = (keyPrefix) => {
  */
 const uploadFile = (file, folderName = "default") => {
     var fileName = file.name;
-    // Generating date wise folder structure for better management
-    var dateObj = new Date();
-    var month = dateObj.getUTCMonth() + 1; //months from 1-12
-    var day = dateObj.getUTCDate();
-    var year = dateObj.getUTCFullYear();
-
-    var photoKey = year + "/" + month + "/" + day + "/" + folderName + "/" + fileName;
+    
+    var photoKey = folderName + "/" + fileName;
 
     // Use S3 ManagedUpload class as it supports multipart uploads
     var upload = new AWS.S3.ManagedUpload({

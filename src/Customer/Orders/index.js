@@ -8,9 +8,7 @@ import { getCustomerToken } from "../../utils";
  * Single List UI
  */
 const ListHtml = ({ order }) => {
-
     const handleChange = (e) => {
-        console.log(e.target.value, "e")
         switch (e.target.value) {
             case "send_receipt":
                 break;
@@ -34,7 +32,7 @@ const ListHtml = ({ order }) => {
             <select className="form-control" onChange={handleChange}>
                 <option value="">Action</option>
                 <option value="send_receipt">Send Receipt</option>
-                <option value="manage_images">Add/Edit Images</option>
+                {/* <option value="manage_images">Add/Edit Images</option> */}
                 <option value="view_payment_details">View payment details</option>
             </select>
         </div>
@@ -44,7 +42,7 @@ const ListHtml = ({ order }) => {
 /**
  * List of orders UI
  */
-const OrderList = ({ orders }) => {
+const OrderList = ({ orders }) => {    
     return orders.map((o, i) => <ListHtml key={i} order={o} />)
 }
 
@@ -64,7 +62,7 @@ export const Orders = () => {
     const { loading, error, data } = useQuery(CUSTOMER_ORDERS, {
         variables: {
             input: customerToken,
-            ordersToShow: 2
+            ordersToShow: 250
         }
     });
 
@@ -72,7 +70,30 @@ export const Orders = () => {
     if (error) return `Error! ${error}`;
 
     let { edges, pageInfo } = data.customer.orders;
-    // console.log(edges, pageInfo, "customer Orders")
+    // let lastItemInList = edges[edges.length - 1]
+    // let firstItemInList = edges[0]
+    
+    // const showPreviousOrders = () => {}
 
-    return <OrderList orders={edges} />
+    // const showNextOrders = () => {}
+
+    return <>
+        <OrderList orders={edges} />
+        {/* <nav className="mx-auto">
+            <ul className="pagination">
+                <li className={pageInfo.hasPreviousPage ? "page-item" : "page-item disabled"}>
+                    <button onClick={showNextOrders} className="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Next</span>
+                    </button>
+                </li>
+                <li className={pageInfo.hasNextPage ? "page-item" : "page-item disabled"}>                    
+                    <button onClick={showPreviousOrders} className="page-link" aria-label="Next">
+                        <span class="sr-only">Previous</span>
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
+            </ul>
+        </nav> */}
+    </>
 }

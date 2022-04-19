@@ -4,7 +4,7 @@ export const CUSTOMER_ORDERS = gql`
     query getCustomerorder($input: String!, $ordersToShow: Int!) {
         customer(customerAccessToken: $input) {
             id
-            orders(first: $ordersToShow) {
+            orders(first: $ordersToShow, reverse: true) {
                 edges {
                     cursor
                     node{

@@ -24,11 +24,11 @@ function Navigation() {
                 <div className="container border-bottom border-dark">
                     <Link to="/" className="navbar-brand text-dark">
                         <div className="mb-2"><img src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/BigTurntables-FinalLogo-Black-small-circle_380x.jpg" className="img-fluid" /></div>
-                        <div className="text-bold">BigT Account</div>
+                        {/* <div className="text-bold">BigT Account</div> */}
                     </Link>
                     <button
                         type="button"
-                        className="navbar-toggler"
+                        className="navbar navbar-light navbar-toggler"
                         data-bs-toggle="collapse"
                         data-bs-target="#navigation"
                         aria-label="navigation"
@@ -44,7 +44,7 @@ function Navigation() {
                             </li>
                             <li className="nav-item">
                                 {
-                                    !isUserLogedIn ? <Link to="/signup" className="nav-link">Create Your BigT Account</Link> : ''
+                                    !isUserLogedIn ? <Link to="/signup" className="nav-link">Sign Up</Link> : ''
                                 }
                             </li>
                             <li className="nav-item">

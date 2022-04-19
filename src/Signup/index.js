@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_CUSTOMER } from "./API";
 import { AlertMsg, SuccessMsg } from "../common-components/alert";
 import { FormLogo } from "../common-components/logos";
+import { Link } from "react-router-dom";
 import "../Login/style.css";
 
-function Signup() {
+export function Signup({cssClasses}) {
     // State for form data
     let [customerData, setCustomerData] = useState({
         acceptsMarketing: false,
@@ -57,107 +58,111 @@ function Signup() {
         setErrorMsg(false);
     }
 
-    // useEffect(() => {
-    //     console.log(customerData, "This is setted customer data")
-    // }, [customerData])
+    return (
+        <form onSubmit={handleSubmit} className={cssClasses}>
+            <div className="col-6 mb-3">
+                <div className="form-floating">
+                    <input
+                        type="text"
+                        placeholder="First Name"
+                        onChange={handleInput}
+                        id="firstName"
+                        name="firstName"
+                        className="form-control"
+                    />
+                    <label
+                        htmlFor="firstName"
+                        className="floating-label"
+                    >First Name</label>
+                </div>
+            </div>
+            <div className="col-6 mb-3">
+                <div className="form-floating">
+                    <input
+                        type="text"
+                        placeholder="Last Name"
+                        onChange={handleInput}
+                        id="lastName"
+                        name="lastName"
+                        className="form-control"
+                    />
+                    <label
+                        htmlFor="lastName"
+                        className="floating-label"
+                    >Last Name</label>
+                </div>
+            </div>
+            <div className="col-6 mb-3">
+                <div className="form-floating">
+                    <input
+                        type="email"
+                        placeholder="Your Email"
+                        onChange={handleInput}
+                        id="email"
+                        name="email"
+                        className="form-control"
+                    />
+                    <label
+                        htmlFor="email"
+                        className="floating-label"
+                    >Email</label>
+                </div>
+            </div>
+            <div className="col-6 mb-3">
+                <div className="form-floating">
+                    <input
+                        type="phone"
+                        placeholder="Your Phone"
+                        onChange={handleInput}
+                        id="phone"
+                        name="phone"
+                        className="form-control"
+                    />
+                    <label
+                        htmlFor="phone"
+                        className="floating-label"
+                    >Phone Number</label>
+                </div>
+                <small>Format+16135551111</small>
+            </div>
+            <div className="col-12 mb-3">
+                <div className="form-floating">
+                    <input
+                        type="password"
+                        placeholder="Your Password"
+                        onChange={handleInput}
+                        id="password"
+                        name="password"
+                        className="form-control"
+                    />
+                    <label
+                        htmlFor="password"
+                        className="floating-label"
+                    >Password</label>
+                </div>
+            </div>
+            {errorMsg ? <AlertMsg>{errorMsg}</AlertMsg> : ''}
+            {successMsg ? <SuccessMsg>{successMsg}</SuccessMsg> : ''}
+            <div className="col-12 text-center">
+                <button
+                    type="submit"
+                    className="btn btn-primary px-5 py-2"
+                >Create Your Account</button>
 
+                <p className="text-center signup-text pt-2 m-0">Already have a BigT account ? <Link to="/login" className="signup-link text-primary">Click here</Link>
+                </p>
+            </div>
+        </form>
+    )
+}
+
+function Index() {
     return (
         <div className="container">
-            <FormLogo />
-            <div className="row">
-                <form onSubmit={handleSubmit} className="w-50 mx-auto row">
-                    <div className="col-6 mb-3">
-                        <div className="form-floating">
-                            <input
-                                type="text"
-                                placeholder="First Name"
-                                onChange={handleInput}
-                                id="firstName"
-                                name="firstName"
-                                className="form-control"
-                            />
-                            <label
-                                htmlFor="firstName"
-                                className="floating-label"
-                            >First Name</label>
-                        </div>
-                    </div>
-                    <div className="col-6 mb-3">
-                        <div className="form-floating">
-                            <input
-                                type="text"
-                                placeholder="Last Name"
-                                onChange={handleInput}
-                                id="lastName"
-                                name="lastName"
-                                className="form-control"
-                            />
-                            <label
-                                htmlFor="lastName"
-                                className="floating-label"
-                            >Last Name</label>
-                        </div>
-                    </div>
-                    <div className="col-6 mb-3">
-                        <div className="form-floating">
-                            <input
-                                type="email"
-                                placeholder="Your Email"
-                                onChange={handleInput}
-                                id="email"
-                                name="email"
-                                className="form-control"
-                            />
-                            <label
-                                htmlFor="email"
-                                className="floating-label"
-                            >Email</label>
-                        </div>
-                    </div>
-                    <div className="col-6 mb-3">
-                        <div className="form-floating">
-                            <input
-                                type="phone"
-                                placeholder="Your Phone"
-                                onChange={handleInput}
-                                id="phone"
-                                name="phone"
-                                className="form-control"
-                            />
-                            <label
-                                htmlFor="phone"
-                                className="floating-label"
-                            >Phone Number <small>Formatted Format +16135551111</small></label>
-                        </div>
-                    </div>
-                    <div className="col-12 mb-3">
-                        <div className="form-floating">
-                            <input
-                                type="password"
-                                placeholder="Your Password"
-                                onChange={handleInput}
-                                id="password"
-                                name="password"
-                                className="form-control"
-                            />
-                            <label
-                                htmlFor="password"
-                                className="floating-label"
-                            >Password</label>
-                        </div>
-                    </div>
-                    {errorMsg ? <AlertMsg>{errorMsg}</AlertMsg> : ''}
-                    {successMsg ? <SuccessMsg>{successMsg}</SuccessMsg> : ''}
-                    <div className="col-12 text-center">
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                        >Register</button>
-                    </div>
-                </form>
-            </div>
+            <FormLogo cssClasses="w-50 mx-auto row" />
+            <Signup cssClasses="row"/>
         </div>
     )
 }
 
-export default Signup;
+export default Index;

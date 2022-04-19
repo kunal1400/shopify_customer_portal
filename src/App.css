@@ -3,3 +3,55 @@
     width: 100%;
     object-fit: cover;
 }
+
+.signup-background {
+    border-radius: 80px !important;
+    margin-top: 10px;
+    background-color: #DAE3F3 !important;
+}
+
+.signup-text {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-weight: bold;
+    color: grey;
+    font-size: 16px;
+    margin-bottom: 2.5rem;
+}
+
+.signup-link {
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.image-parent {
+    display: flex;justify-content: space-between; align-items: center; padding-bottom: 1rem;
+}
+.flex-basis-div {
+    flex-basis: 80%;
+    font-weight: bold;
+}
+
+.group-images {
+    display: flex;
+    justify-content: end;
+}
+
+.group-images-child {
+    display: flex;
+    flex-basis: 82%;
+    justify-content: space-evenly;
+}
+
+.pricing-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pricing-item-span {
+    line-height: 2;
+    font-weight: bold;
+
+}

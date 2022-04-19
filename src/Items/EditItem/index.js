@@ -11,7 +11,6 @@ export const EditItem = () => {
 
     // After all files are uploaded in s3
     const afterUpload = (extra, s3ServerUrls) => {
-        console.log(extra, s3ServerUrls, "extra, s3ServerUrls")
         setUploadedFiles(s3ServerUrls)
     }
 
@@ -22,14 +21,17 @@ export const EditItem = () => {
             .then(resData => SetImages(resData.data.Contents))
     }, [])
 
-    if (!folderPath) {
-        return <div>No Items in folder</div>
-    } else {
+    console.log(images)
+
+    if ( !folderPath ) {
+        return <div>Invalid folderPath</div>
+    } 
+    else {
         return <div className='container'>
             <h6><b>Add/Remove Item</b></h6>
             <div className='row'>
                 {/* <AllCards items={images} /> */}
-                <BootstrapFileUpload filebatchuploadcomplete={afterUpload} initialPreview={images} />
+                <BootstrapFileUpload filebatchuploadcomplete={afterUpload} initialPreview={images} uploadStartTime={folderPath} />
             </div>
         </div>
     }

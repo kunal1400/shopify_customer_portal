@@ -3,9 +3,9 @@ import Navigation from "../Navigation";
 import Login from "../Login";
 import Home from "../Home";
 import Signup from "../Signup";
+import ForgotPassword from "../ForgotPassword";
 import SectionWithSidebar from "../Customer";
 import { EditItem } from "../Items/EditItem";
-import Footer from "../Footer";
 
 function Layout() {
     return (
@@ -18,6 +18,7 @@ function Layout() {
                 <Route exact path="/signup" element={<Signup />} />
                 <Route path="/customer/:section" element={<SectionWithSidebar />} />
                 <Route path="/edit-item" element={<EditItem />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />                
             </Routes>
         </BrowserRouter>
     )

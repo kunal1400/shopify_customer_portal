@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 // Define mutation
 export const GET_CUSTOMER_ACCESS_TOKEN = gql`
