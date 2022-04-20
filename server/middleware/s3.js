@@ -86,8 +86,30 @@ const uploadFile = (file, folderName = "default") => {
     return upload.promise();
 }
 
+/**
+ * This function will delete the file from s3 bucket
+ *
+ * @param { string } filePath
+ */
+ const deleteFile = (filePath) => {     
+    return new Promise((resolve, reject) => {
+        instance.deleteObject({ Key: `${filePath}`}, function(err, data) {
+                if (err) {
+                    reject(err);
+                } 
+                else {
+                    resolve(data);
+                }
+            }
+        );
+    });    
+
+    // return deleteResponse;
+}
+
 module.exports = {
     uploadBase64,
     listKeys,
-    uploadFile
+    uploadFile,
+    deleteFile
 }

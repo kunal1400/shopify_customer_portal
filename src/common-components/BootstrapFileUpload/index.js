@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
-import 'bootstrap-fileinput/css/fileinput.min.css';
 import PropTypes from 'prop-types';
 import fileinput from 'bootstrap-fileinput';
+import 'bootstrap-fileinput/css/fileinput.min.css';
 
 const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadStartTime }) => {
     let inputFileRef = useRef();
@@ -19,6 +19,10 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadSt
         initialPreviewAsData: true,
         initialPreviewCount: true,
         showUpload: true,
+        fileActionSettings: {
+            showZoom: false,
+            showDrag: false
+        },        
         // deleteUrl: '/localhost/avatar/delete',
         uploadExtraData: function (previewId, index) {
             return {
@@ -35,11 +39,13 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadSt
     if(initialPreview instanceof Array && initialPreview.length > 0) {
         fileInputConfig.showPreview = true;        
         fileInputConfig.initialPreview = initialPreview.map((item, index) => `${process.env.REACT_APP_BUCKET_URL}/${item.Key}`);
-        fileInputConfig.initialPreviewConfig = initialPreview.map((item, index) => ({
-            caption: item.ETag,
-            key: item.key,
-            url: '/localhost/avatar/delete'
-        }));
+        fileInputConfig.initialPreviewConfig = initialPreview.map((item, index) => {
+            return {
+                caption: item.ETag,
+                key: item.Key,
+                url: `${process.env.REACT_APP_BACKEND_URL}/delete_file?filePath=${item.Key}`
+            }
+        });
         
         // Setting initial preview
         setInitialPreview()

@@ -76,19 +76,22 @@ app.get('/files', async (req, res) => {
             data: s3response
         });
     }
+})
 
-    // try {
-    //     if (!req.files) {
-    //         res.send({
-    //             status: false,
-    //             message: 'No file uploaded'
-    //         });
-    //     } else {
-
-    //     }
-    // } catch (err) {
-    //     res.status(500).send(err);
-    // }
+// Handling file Delete
+app.post('/delete_file', async (req, res) => {
+    try {
+        if (!req.query) {
+            res.send({msg: "No query"})
+        } else {
+            const deleteResponse = await s3.deleteFile(req.query.filePath);
+            console.log(deleteResponse, "s3")
+            res.send({query: req.query})
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).send(err);
+    }
 })
 
 app.listen(port, () => {

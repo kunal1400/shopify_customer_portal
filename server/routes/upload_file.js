@@ -16,7 +16,16 @@ const getFolderFiles = async (folderName) => {
     }
 }
 
+const deleteFile = async (filePath) => {
+    try {
+        return await s3.deleteFile(filePath);
+    } catch (err) {
+        return err;
+    }
+}
+
 module.exports = {
     upload_file,
-    getFolderFiles
+    getFolderFiles,
+    deleteFile
 }

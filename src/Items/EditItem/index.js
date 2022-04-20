@@ -21,8 +21,6 @@ export const EditItem = () => {
             .then(resData => SetImages(resData.data.Contents))
     }, [])
 
-    console.log(images)
-
     if ( !folderPath ) {
         return <div>Invalid folderPath</div>
     } 
