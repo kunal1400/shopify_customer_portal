@@ -10,8 +10,8 @@ export const DefaultSidebarItems = [
     { label: 'Profile Info', link: "/customer/profile-info" },
     { label: 'Contact Info', link: "/customer/contact-info" },
     { label: 'Password', link: "/customer/password" },
-    { label: 'Advanced Settings', link: "/customer/advanced-settings" },
-    { label: 'Billing Info', link: "/customer/billing-info" },
+    // { label: 'Advanced Settings', link: "/customer/advanced-settings" },
+    // { label: 'Billing Info', link: "/customer/billing-info" },
     { label: 'Order History', link: "/customer/order-history" }
 ]
 
