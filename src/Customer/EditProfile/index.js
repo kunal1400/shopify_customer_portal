@@ -17,8 +17,7 @@ export function EditProfile({customer}) {
         phone
     })
 
-    let [updateCustomer, { loading, data, error }] = useMutation(CUSTOMER_UPDATE)
-    console.log(loading, data, error, "update");
+    let [updateCustomer, { loading, data, error }] = useMutation(CUSTOMER_UPDATE);
 
     const handleChange = (e) => {
         if(e.target.name && e.target.value) {
