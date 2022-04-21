@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { CUSTOMER_UPDATE } from "./API";
+import { getCustomerToken } from "../../utils";
 
 export function EditProfile({customer}) {
     let {email, firstName, lastName, phone, displayName } = customer;
@@ -14,14 +17,26 @@ export function EditProfile({customer}) {
         phone
     })
 
+    let [updateCustomer, { loading, data, error }] = useMutation(CUSTOMER_UPDATE)
+    console.log(loading, data, error, "update");
+
     const handleChange = (e) => {
         if(e.target.name && e.target.value) {
             let newFormData = {...formData, [e.target.name]: e.target.value}
             setFormData(newFormData)
         }        
+    }    
+
+    const toggleDisplayName = () => {
+        setFormData({...formData, usernameDisabled: !formData.usernameDisabled})
+    }
+
+    const toggleEmailName = () => {
+        setFormData({...formData, emailDisabled: !formData.emailDisabled})
     }
 
     const submitForm = () => {
+        let customerToken = getCustomerToken();
         let copiedFormData = {...formData}        
         if( copiedFormData.usernameDisabled ) {            
             delete copiedFormData.displayName
@@ -32,20 +47,12 @@ export function EditProfile({customer}) {
         // Deleting unnecessary keys
         delete copiedFormData.emailDisabled
         delete copiedFormData.usernameDisabled
-        console.log(copiedFormData, "data to send");
-    }
-
-    const toggleDisplayName = () => {
-        setFormData({...formData, usernameDisabled: !formData.usernameDisabled})
-    }
-
-    const toggleEmailName = () => {
-        setFormData({...formData, emailDisabled: !formData.emailDisabled})
+        updateCustomer({ variables: { customer: copiedFormData, customerAccessToken: customerToken } })        
     }
 
     return <div>
         <h2>Account Information</h2>
-        <div className="form-group">
+        {/* <div className="form-group">
             <label>Username</label>
             <div className="input-group">
                 <input 
@@ -60,7 +67,7 @@ export function EditProfile({customer}) {
                     <button onClick={toggleDisplayName} className="btn btn-outline-secondary" type="button">Edit</button>
                 </div>
             </div>        
-        </div>
+        </div> */}
         <div className="form-group">
             <label>Email <small>(Private)</small></label>
             <div className="input-group">

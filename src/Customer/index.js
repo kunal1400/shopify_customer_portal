@@ -18,8 +18,6 @@ export default function SectionWithSidebar(props) {
     // Getting customer data
     const { loading, error, data } = useQuery( CUSTOMER, {variables: {input: customerToken}} );
 
-    console.log(error, data, "error and data")
-
     return <div className="container" id="customer-section">
         <div className="row">
             <div className="col-sm-3">
