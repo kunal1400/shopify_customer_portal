@@ -107,7 +107,7 @@ function Login(props) {
     return (
         <div className="row">
             <form onSubmit={handleSubmit} className="p-3 w-50 mx-auto">
-                <FormLogo />
+                <FormLogo heading="BigTT Account" />
                 <div className="col-12 mb-3 form-floating">
                     <Input
                         type="email"

@@ -1,21 +1,23 @@
 import { useMutation } from "@apollo/client";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { CUSTOMER_PASSWORD_RESET } from './API';
-import { AlertMsg, SuccessMsg } from "../common-components/alert";
+import { HandleApolloClientErrors } from "../common-components/alert";
 import { FormLogo } from "../common-components/logos";
+import { useNavigate } from "react-router-dom";
 
 export function ForgotPasswordForm({cssClasses}) {
+    let navigate = useNavigate();
+
     // State for form data
     let [customerData, setCustomerData] = useState({        
         email: ""
     });
 
-    // state for error handling
-    let [errorMsg, setErrorMsg] = useState(false);
+    // Set apollo Errors
+    let [responseErrors, setResponseErrors] = useState(false);
 
-    // state for error handling
-    let [successMsg, setsuccessMsg] = useState(false);
+    // Show email sent message
+    let [emailSentMessage, setEmailSentMessage] = useState(false);
 
     let [passwordReset, { loading, data, error }] = useMutation(CUSTOMER_PASSWORD_RESET);
 
@@ -27,18 +29,11 @@ export function ForgotPasswordForm({cssClasses}) {
 
             // Extracting the API response data
             let { customerUserErrors } = responseData.data.customerRecover;
-
-            // Catching all errors and showing it in UI
-            if ( customerUserErrors instanceof Array && customerUserErrors.length > 0 ) {
-                let errorMessages = customerUserErrors.map(d => d.message);
-                if (errorMessages.length > 0) {
-                    // Errors setted
-                    setErrorMsg(errorMessages.join("\n"))
-                }
-            }
-            else {
-                setsuccessMsg("Password reset link sent on your email, please check!!")
-            }
+            if(customerUserErrors.length === 0) {
+                navigate("/forgot-password-link-sent");
+            } else {
+                setResponseErrors(customerUserErrors);
+            }            
         }
         catch (e) {
             console.log(e, "error")
@@ -48,11 +43,12 @@ export function ForgotPasswordForm({cssClasses}) {
     const handleInput = (e) => {
         let newData = { ...customerData, [e.target.name]: e.target.value }
         setCustomerData(newData);
-        setErrorMsg(false);
+        setResponseErrors(false);
     }
 
     return (
-        <form onSubmit={handleSubmit} className={cssClasses}>            
+        <form onSubmit={handleSubmit} className={cssClasses}>
+            <div className="text-center mb-3">Enter your email address and we'll send you a link to reset your password.</div>
             <div className="col-12 mb-3">
                 <div className="form-floating">
                     <input
@@ -69,8 +65,11 @@ export function ForgotPasswordForm({cssClasses}) {
                     >Email</label>
                 </div>
             </div>
-            {errorMsg ? <AlertMsg>{errorMsg}</AlertMsg> : ''}
-            {successMsg ? <SuccessMsg>{successMsg}</SuccessMsg> : ''}
+            <HandleApolloClientErrors 
+                loading={loading} 
+                errorsFromResponse={responseErrors} 
+                successMsg="Password reset link sent on your email, please check!!" 
+            />            
             <div className="col-12 text-center">
                 <button type="submit" className="btn btn-primary px-5 py-2">Submit</button>
             </div>
@@ -81,7 +80,7 @@ export function ForgotPasswordForm({cssClasses}) {
 function Index() {
     return (
         <div className="container">
-            <FormLogo cssClasses="w-50 mx-auto row" />
+            <FormLogo cssClasses="w-50 mx-auto row" heading="Forgot Your Password?" />            
             <ForgotPasswordForm cssClasses="w-50 mx-auto row"/>
         </div>
     )

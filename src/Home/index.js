@@ -25,23 +25,23 @@ function Home() {
                         <h3 className="font-weight-bold text-center">Features</h3>
                         <div className="shadow p-3">
                             <div className="image-parent">
-                                <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />  
+                                <img style={{height: 60}} alt="imageupload" src="/imageupload.png" className="img-fluid" />  
                                <div className="flex-basis-div"> Upload and store images for up to 100 objects for free</div>
                             </div>
                             <div className="image-parent">
-                                <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />  
+                                <img style={{height: 60}} alt="penciledit" src="/penciledit.png" className="img-fluid" />  
                                <div className="flex-basis-div"> Edit up to 72 images per item</div>
                             </div>
                             <div className="image-parent">
-                                <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />  
+                                <img style={{height: 60}} alt="refresh" src="/refresh.png" className="img-fluid" />  
                                <div className="flex-basis-div">Convert your images into 360 degree images, .gifs, 3D scans and NFTs</div>
                             </div>
                             <div className="group-images">
                                 <div className="group-images-child">
-                                    <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />
-                                    <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />
-                                    <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />
-                                    <img style={{height: 60}} src="https://cdn.shopify.com/s/files/1/0600/4503/3700/files/circle_150x.png" className="img-fluid" />  
+                                    <img style={{height: 60}} alt="spinbox" src="/spinbox.png" className="img-fluid" />
+                                    <img style={{height: 60}} alt="gif" src="/gif.png" className="img-fluid" />
+                                    <img style={{height: 60}} alt="3d" src="/3d.png" className="img-fluid" />
+                                    <img style={{height: 60}} alt="nft" src="/nft.png" className="img-fluid" />  
                                 </div>
                             </div>
                         </div>

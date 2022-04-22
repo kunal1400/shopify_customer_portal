@@ -159,7 +159,7 @@ export function Signup({cssClasses}) {
 function Index() {
     return (
         <div className="container">
-            <FormLogo cssClasses="w-50 mx-auto row" />
+            <FormLogo heading="Create Your BigTT Account" cssClasses="w-50 mx-auto row" />
             <Signup cssClasses="row"/>
         </div>
     )
