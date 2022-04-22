@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_CUSTOMER } from "./API";
-import { AlertMsg, SuccessMsg } from "../common-components/alert";
+import { HandleApolloClientErrors } from "../common-components/alert";
 import { FormLogo } from "../common-components/logos";
 import { Link } from "react-router-dom";
 import "../Login/style.css";
@@ -20,9 +20,6 @@ export function Signup({cssClasses}) {
     // state for error handling
     let [errorMsg, setErrorMsg] = useState(false);
 
-    // state for error handling
-    let [successMsg, setsuccessMsg] = useState(false);
-
     let [createCustomer, { loading, data, error }] = useMutation(CREATE_CUSTOMER);
 
     const handleSubmit = async (e) => {
@@ -32,20 +29,8 @@ export function Signup({cssClasses}) {
             const responseData = await createCustomer({ variables: { input: customerData } })
 
             // Extracting the API response data
-            let { customer, customerUserErrors } = responseData.data.customerCreate
-
-            // Catching all errors and showing it in UI
-            if (customerUserErrors instanceof Array && customerUserErrors.length > 0) {
-                let errorMessages = customerUserErrors.map(d => d.message);
-                if (errorMessages.length > 0) {
-                    // Errors setted
-                    setErrorMsg(errorMessages.join("\n"))
-                }
-            }
-            else if (customer && customer.id) {
-                setsuccessMsg("Customer successfully signup")
-            }
-            console.log(customer, customerUserErrors, errorMsg, "responseData")
+            let { customer, customerUserErrors } = responseData.data.customerCreate;
+            setErrorMsg(customerUserErrors);
         }
         catch (e) {
             console.log(e, "error")
@@ -141,8 +126,12 @@ export function Signup({cssClasses}) {
                     >Password</label>
                 </div>
             </div>
-            {errorMsg ? <AlertMsg>{errorMsg}</AlertMsg> : ''}
-            {successMsg ? <SuccessMsg>{successMsg}</SuccessMsg> : ''}
+            <HandleApolloClientErrors 
+                loading={loading} 
+                errorsFromResponse={errorMsg} 
+                error={error}
+                successMsg="Customer successfully signup" 
+            />
             <div className="col-12 text-center">
                 <button
                     type="submit"

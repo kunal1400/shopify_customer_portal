@@ -42,8 +42,12 @@ const ListHtml = ({ order }) => {
 /**
  * List of orders UI
  */
-const OrderList = ({ orders }) => {    
-    return orders.map((o, i) => <ListHtml key={i} order={o} />)
+const OrderList = ({ orders }) => {
+    if(orders.length > 0) {
+        return orders.map((o, i) => <ListHtml key={i} order={o} />)
+    } else {
+        return <div className="alert alert-warning">No Order found</div>
+    }
 }
 
 /**

@@ -46,14 +46,18 @@ const ListHtml = ({ lineItems, orderId, orderName, processedAt, fulfillmentStatu
  * List of orders UI
  */
 const OrderList = ({ orders }) => {
-    return orders.map((o, j) => <ListHtml
-        key={j}
-        lineItems={o.node.lineItems}
-        orderId={o.node.id}
-        orderName={o.node.name}
-        processedAt={o.node.processedAt}
-        fulfillmentStatus={o.node.fulfillmentStatus}
-    />)
+    if(orders.length > 0) {
+        return orders.map((o, j) => <ListHtml
+            key={j}
+            lineItems={o.node.lineItems}
+            orderId={o.node.id}
+            orderName={o.node.name}
+            processedAt={o.node.processedAt}
+            fulfillmentStatus={o.node.fulfillmentStatus}
+        />)
+    } else {
+        return <div className="alert alert-warning">No Items</div>
+    }
 }
 
 /**

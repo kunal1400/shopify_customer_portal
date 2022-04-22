@@ -12,7 +12,7 @@ export const SuccessMsg = (props) => {
  * This global function will show graphql error
  * @param {*} param0 
  */
-export function HandleApolloClientErrors({ loading, errorsFromResponse, successMsg}) {    
+export function HandleApolloClientErrors({ loading, error, errorsFromResponse, successMsg}) {
     // state for error handling
     let [errorMsg, setErrorMsg] = useState(false);
 
@@ -33,7 +33,10 @@ export function HandleApolloClientErrors({ loading, errorsFromResponse, successM
             setCustomSuccessMsg(false)
             setErrorMsg(false)
         }
-    }, [errorsFromResponse, successMsg])
+        if(error) {
+            setErrorMsg("Limit exceeded. Please try again later.")
+        }
+    }, [loading, errorsFromResponse, successMsg, error])
 
     if(loading) {
         return <div>Loading...</div>
