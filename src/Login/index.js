@@ -95,7 +95,7 @@ function Login(props) {
                 else if (customerAccessToken) {
                     saveCustomerToken(customerAccessToken)
                     // After login redirect user to home page
-                    navigate("/")
+                    navigate("/customer/order-history")
                 }
             }
             catch (e) {

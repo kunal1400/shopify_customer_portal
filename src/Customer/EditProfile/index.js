@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import PhoneInput from 'react-phone-number-input';
+import { HandleApolloClientErrors } from "../../common-components/alert";
 import { CUSTOMER_UPDATE } from "./API";
 import { getCustomerToken } from "../../utils";
 
@@ -13,9 +15,14 @@ export function EditProfile({customer}) {
         email, 
         firstName, 
         lastName, 
-        displayName,
-        phone
+        displayName        
     })
+
+    let [phoneNumber, setPhoneNumber] = useState(phone);
+
+    let [customerSuccessMsg, setCustomerSuccessMsg] = useState(false);
+
+    let [errorMsg, setErrorMsg] = useState(false);
 
     let [updateCustomer, { loading, data, error }] = useMutation(CUSTOMER_UPDATE);
 
@@ -34,7 +41,7 @@ export function EditProfile({customer}) {
         setFormData({...formData, emailDisabled: !formData.emailDisabled})
     }
 
-    const submitForm = () => {
+    const submitForm = async () => {
         let customerToken = getCustomerToken();
         let copiedFormData = {...formData}        
         if( copiedFormData.usernameDisabled ) {            
@@ -46,84 +53,98 @@ export function EditProfile({customer}) {
         // Deleting unnecessary keys
         delete copiedFormData.emailDisabled
         delete copiedFormData.usernameDisabled
-        updateCustomer({ variables: { customer: copiedFormData, customerAccessToken: customerToken } })        
+
+        const responseData = await updateCustomer({ variables: { customer: copiedFormData, customerAccessToken: customerToken } });
+        let { customer, customerUserErrors } = responseData.data.customerUpdate;
+        setErrorMsg(customerUserErrors);
+        if(customer) {
+            setCustomerSuccessMsg("Customer updated")
+        }
     }
 
-    return <div>
-        <h2>Account Information</h2>
-        {/* <div className="form-group">
-            <label>Username</label>
-            <div className="input-group">
+    return <>
+        <div className="mb-5">
+            <h2 className="mb-3">Account Information</h2>
+            {/* <div className="form-group">
+                <label>Username</label>
+                <div className="input-group">
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        defaultValue={formData.displayName} 
+                        disabled={formData.usernameDisabled ? true : false }
+                        name="displayName"
+                        onChange={handleChange}
+                    />
+                    <div className="input-group-append">
+                        <button onClick={toggleDisplayName} className="btn btn-outline-secondary" type="button">Edit</button>
+                    </div>
+                </div>        
+            </div> */}
+            <div className="form-group">
+                <label>Email <small>(Private)</small></label>
+                <div className="input-group">
+                    <input 
+                        type="email" 
+                        className="form-control" 
+                        defaultValue={formData.email} 
+                        disabled={formData.emailDisabled ? true : false }
+                        name="email"
+                        onChange={handleChange}
+                    />
+                    <div className="input-group-append">
+                        <button onClick={toggleEmailName} className="btn btn-outline-secondary" type="button">Edit</button>
+                    </div>
+                </div>            
+            </div>
+        </div>
+        <div className="mb-5">
+            <h2 className="mb-2">Profile Information</h2>        
+            <div className="form-group mb-2">
+                <label>First Name</label>
                 <input 
                     type="text" 
                     className="form-control" 
-                    defaultValue={formData.displayName} 
-                    disabled={formData.usernameDisabled ? true : false }
-                    name="displayName"
+                    defaultValue={formData.firstName}
+                    name="firstName"
                     onChange={handleChange}
                 />
-                <div className="input-group-append">
-                    <button onClick={toggleDisplayName} className="btn btn-outline-secondary" type="button">Edit</button>
-                </div>
-            </div>        
-        </div> */}
-        <div className="form-group">
-            <label>Email <small>(Private)</small></label>
-            <div className="input-group">
+            </div>
+            <div className="form-group mb-2">
+                <label>Last Name</label>
                 <input 
-                    type="email" 
+                    type="text" 
                     className="form-control" 
-                    defaultValue={formData.email} 
-                    disabled={formData.emailDisabled ? true : false }
-                    name="email"
+                    defaultValue={formData.lastName}
+                    name="lastName"
                     onChange={handleChange}
                 />
-                <div className="input-group-append">
-                    <button onClick={toggleEmailName} className="btn btn-outline-secondary" type="button">Edit</button>
-                </div>
-            </div>            
-        </div>
-        <h2>Profile Information</h2>        
-        <div className="form-group">
-            <label>First Name</label>
-            <input 
-                type="text" 
-                className="form-control" 
-                defaultValue={formData.firstName}
-                name="firstName"
-                onChange={handleChange}
+            </div>
+            <div className="form-group mb-2">
+                <label>Phone</label>
+                {/* <input 
+                    type="text" 
+                    className="form-control" 
+                    defaultValue={formData.phone}
+                    name="phone"
+                    onChange={handleChange}
+                /> */}
+                <PhoneInput
+                    placeholder="Enter phone number"
+                    defaultCountry="US"
+                    value={phoneNumber}
+                    onChange={setPhoneNumber}
+                />
+            </div>
+            <HandleApolloClientErrors 
+                loading={loading} 
+                errorsFromResponse={errorMsg} 
+                error={error}
+                successMsg={customerSuccessMsg}
             />
-        </div>
-        <div className="form-group">
-            <label>Last Name</label>
-            <input 
-                type="text" 
-                className="form-control" 
-                defaultValue={formData.lastName}
-                name="lastName"
-                onChange={handleChange}
-            />
-        </div>
-        <div className="form-group">
-            <label>Phone</label>
-            <input 
-                type="text" 
-                className="form-control" 
-                defaultValue={formData.phone}
-                name="phone"
-                onChange={handleChange}
-            />
-        </div>
-        <div className="form-group">
-            <button onClick={submitForm} className="btn btn-primary my-3">Submit</button>
-        </div>
-        {/* <div className="form-group">
-            <label>Company Name (optional)</label>
-            <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-            <label>About me/us</label>
-            <textarea className="form-control" rows={4}></textarea>                
-        </div> */}
-    </div>
+            <div className="form-group">
+                <button onClick={submitForm} className="btn btn-primary my-3">Submit</button>
+            </div>
+        </div>        
+    </>
 }

@@ -58,6 +58,7 @@ export function ForgotPasswordForm({cssClasses}) {
                         id="email"
                         name="email"
                         className="form-control"
+                        required="required"
                     />
                     <label
                         htmlFor="email"

@@ -1,3 +1,15 @@
+.PhoneInputInput {
+    flex: 1 1;
+    min-width: 0;
+    padding: 1rem 0.75rem;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    appearance: none;
+    border-radius: 0.25rem;
+}
+
 .cardFixedAspectRatio {
     height: 200px;
     width: 100%;

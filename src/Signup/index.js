@@ -1,40 +1,74 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
+import PhoneInput from 'react-phone-number-input';
 import { CREATE_CUSTOMER } from "./API";
 import { HandleApolloClientErrors } from "../common-components/alert";
 import { FormLogo } from "../common-components/logos";
-import { Link } from "react-router-dom";
+import 'react-phone-number-input/style.css';
 import "../Login/style.css";
 
 export function Signup({cssClasses}) {
     // State for form data
     let [customerData, setCustomerData] = useState({
-        acceptsMarketing: false,
-        phone: "",
+        acceptsMarketing: false,        
         firstName: "",
         lastName: "",
         email: "",
         password: "",
     });
 
-    // state for error handling
     let [errorMsg, setErrorMsg] = useState(false);
+
+    let [phoneNumber, setPhoneNumber] = useState();
+
+    let [customerSuccessMsg, setCustomerSuccessMsg] = useState(false);
 
     let [createCustomer, { loading, data, error }] = useMutation(CREATE_CUSTOMER);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            // Calling Create Customer API
-            const responseData = await createCustomer({ variables: { input: customerData } })
+        if(!customerData.firstName) {
+            setErrorMsg([{message: "First Name is required"}]);
+            return;
+        }
+        if(!customerData.lastName) {
+            setErrorMsg([{message: "Last Name is required"}]);
+            return;
+        }
+        if(!customerData.email) {
+            setErrorMsg([{message: "Email is required"}]);
+            return;
+        }
+        if(!phoneNumber) {
+            setErrorMsg([{message: "Phone Number is required"}]);
+            return;
+        }
 
-            // Extracting the API response data
-            let { customer, customerUserErrors } = responseData.data.customerCreate;
-            setErrorMsg(customerUserErrors);
+        // Calling Create Customer API after Password validation
+        if(!customerData.password) {
+            setErrorMsg([{message: "Password is required"}]);
+            return;
         }
-        catch (e) {
-            console.log(e, "error")
+        else if(customerData.password.length < 5) {
+            setErrorMsg([{message: "Password is too short (minimum is 5 characters)"}]);
         }
+        else {
+            try {
+                // Calling Create Customer API
+                const responseData = await createCustomer({ variables: { input: {...customerData, phone: phoneNumber} } })
+    
+                // Extracting the API response data
+                let { customer, customerUserErrors } = responseData.data.customerCreate;
+                setErrorMsg(customerUserErrors);
+                if(customer) {
+                    setCustomerSuccessMsg("Customer Singup successfully you can now login")
+                }
+            }
+            catch (e) {
+                console.log(e, "error")
+            }
+        }        
     }
 
     const handleInput = (e) => {
@@ -93,22 +127,14 @@ export function Signup({cssClasses}) {
                     >Email</label>
                 </div>
             </div>
-            <div className="col-6 mb-3">
-                <div className="form-floating">
-                    <input
-                        type="phone"
-                        placeholder="Your Phone"
-                        onChange={handleInput}
-                        id="phone"
-                        name="phone"
-                        className="form-control"
-                    />
-                    <label
-                        htmlFor="phone"
-                        className="floating-label"
-                    >Phone Number</label>
-                </div>
-                <small>Format+16135551111</small>
+            <div className="col-6 mb-3">                
+                {/* <label htmlFor="phone" className="floating-label">Phone Number</label> */}
+                <PhoneInput
+                    placeholder="Enter phone number"
+                    defaultCountry="US"
+                    value={phoneNumber}
+                    onChange={setPhoneNumber}
+                />
             </div>
             <div className="col-12 mb-3">
                 <div className="form-floating">
@@ -130,7 +156,7 @@ export function Signup({cssClasses}) {
                 loading={loading} 
                 errorsFromResponse={errorMsg} 
                 error={error}
-                successMsg="Customer successfully signup" 
+                successMsg={customerSuccessMsg}
             />
             <div className="col-12 text-center">
                 <button

@@ -19,6 +19,9 @@ export function HandleApolloClientErrors({ loading, error, errorsFromResponse, s
     // state for error handling
     let [customSuccessMsg, setCustomSuccessMsg] = useState(false);
 
+    // state for error handling
+    let [showLoader, setLoader] = useState(false);
+
     useEffect(() => {
         // If errorsFromResponse is array then it is definitely after API response
         if ( errorsFromResponse instanceof Array && errorsFromResponse.length > 0 ) {
@@ -26,24 +29,25 @@ export function HandleApolloClientErrors({ loading, error, errorsFromResponse, s
             if (errorMessages.length > 0) {
                 // Errors setted
                 setErrorMsg(errorMessages.join("\n"))
-            } else {
-                setCustomSuccessMsg(successMsg)
             }
         } else {
-            setCustomSuccessMsg(false)
             setErrorMsg(false)
         }
         if(error) {
             setErrorMsg("Limit exceeded. Please try again later.")
         }
+        // Show loader
+        setLoader(loading);
+        // Showing Success Message
+        setCustomSuccessMsg(successMsg)
     }, [loading, errorsFromResponse, successMsg, error])
 
-    if(loading) {
+    if(showLoader) {
         return <div>Loading...</div>
-    }
-    if(errorMsg) {
+    } 
+    else if(errorMsg) {
         return <AlertMsg>{errorMsg}</AlertMsg>
-    }
+    } 
     else if(customSuccessMsg) {
         return <SuccessMsg>{customSuccessMsg}</SuccessMsg>
     }

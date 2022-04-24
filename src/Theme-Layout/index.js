@@ -4,7 +4,7 @@ import Login from "../Login";
 import Home from "../Home";
 import Signup from "../Signup";
 import ForgotPassword from "../ForgotPassword";
-import {EmailSent as ForgotPasswordLinkSent} from "../ForgotPassword/EmailSent";
+import { EmailSent as ForgotPasswordLinkSent } from "../ForgotPassword/EmailSent";
 import SectionWithSidebar from "../Customer";
 import { EditItem } from "../Items/EditItem";
 
