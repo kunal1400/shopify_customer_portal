@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from 'react-phone-number-input';
 import { CREATE_CUSTOMER } from "./API";
+import { GET_CUSTOMER_ACCESS_TOKEN } from "../Login/API";
 import { HandleApolloClientErrors } from "../common-components/alert";
 import { FormLogo } from "../common-components/logos";
+import { saveCustomerToken } from "../utils";
 import 'react-phone-number-input/style.css';
 import "../Login/style.css";
 
 export function Signup({cssClasses}) {
+    let navigate = useNavigate();
+
     // State for form data
     let [customerData, setCustomerData] = useState({
         acceptsMarketing: false,        
@@ -25,6 +29,7 @@ export function Signup({cssClasses}) {
     let [customerSuccessMsg, setCustomerSuccessMsg] = useState(false);
 
     let [createCustomer, { loading, data, error }] = useMutation(CREATE_CUSTOMER);
+    let [getAccessToken, customer_access_token_states] = useMutation(GET_CUSTOMER_ACCESS_TOKEN);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,13 +67,43 @@ export function Signup({cssClasses}) {
                 let { customer, customerUserErrors } = responseData.data.customerCreate;
                 setErrorMsg(customerUserErrors);
                 if(customer) {
-                    setCustomerSuccessMsg("Customer Singup successfully you can now login")
+                    const customerAccessTokenResponse = await getAccessToken({ 
+                        variables: { 
+                            input: { 
+                                email: customerData.email, 
+                                password: customerData.password 
+                            } 
+                        } 
+                    });
+                    
+                    // Catching all errors and showing it in UI
+                    if (customerAccessTokenResponse && 
+                        customerAccessTokenResponse.data &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors instanceof Array && 
+                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors.length > 0
+                        ) {
+                        setErrorMsg(customerUserErrors);
+                    }
+                    else if (customerAccessTokenResponse && 
+                        customerAccessTokenResponse.data &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken
+                        ) {
+                        saveCustomerToken(customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken);
+
+                        // After login redirect user to home page
+                        navigate("/customer/order-history");
+                    }
+                    else {
+                        console.log("Some error in", customerAccessTokenResponse)
+                    }
                 }
             }
             catch (e) {
                 console.log(e, "error")
             }
-        }        
+        }
     }
 
     const handleInput = (e) => {

@@ -4,6 +4,7 @@ import Login from "../Login";
 import Home from "../Home";
 import Signup from "../Signup";
 import ForgotPassword from "../ForgotPassword";
+import PasswordReset from "../ForgotPassword/UpdatePasswordByUrl";
 import { EmailSent as ForgotPasswordLinkSent } from "../ForgotPassword/EmailSent";
 import SectionWithSidebar from "../Customer";
 import { EditItem } from "../Items/EditItem";
@@ -21,6 +22,7 @@ function Layout() {
                 <Route path="/edit-item" element={<EditItem />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/forgot-password-link-sent" element={<ForgotPasswordLinkSent />} />                
+                <Route path="/reset-password" element={<PasswordReset />} />                
             </Routes>
         </BrowserRouter>
     )

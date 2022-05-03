@@ -17,7 +17,7 @@ export function ForgotPasswordForm({cssClasses}) {
     let [responseErrors, setResponseErrors] = useState(false);
 
     // Show email sent message
-    let [emailSentMessage, setEmailSentMessage] = useState(false);
+    let [emailSentMessage] = useState(false);
 
     let [passwordReset, { loading, data, error }] = useMutation(CUSTOMER_PASSWORD_RESET);
 
@@ -27,9 +27,11 @@ export function ForgotPasswordForm({cssClasses}) {
             // Calling Create Customer API
             const responseData = await passwordReset({ variables: customerData })
 
+            console.log(responseData, "responseData")
+
             // Extracting the API response data
             let { customerUserErrors } = responseData.data.customerRecover;
-            if(customerUserErrors.length === 0) {
+            if( customerUserErrors.length === 0 ) {
                 navigate("/forgot-password-link-sent");
             } else {
                 setResponseErrors(customerUserErrors);
@@ -69,7 +71,7 @@ export function ForgotPasswordForm({cssClasses}) {
             <HandleApolloClientErrors 
                 loading={loading} 
                 errorsFromResponse={responseErrors} 
-                successMsg="Password reset link sent on your email, please check!!" 
+                successMsg={emailSentMessage}
             />            
             <div className="col-12 text-center">
                 <button type="submit" className="btn btn-primary px-5 py-2">Submit</button>
