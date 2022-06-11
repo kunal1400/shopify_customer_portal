@@ -23,23 +23,27 @@ export function HandleApolloClientErrors({ loading, error, errorsFromResponse, s
     let [showLoader, setLoader] = useState(false);
 
     useEffect(() => {
+        // Show loader
+        setLoader(loading);
+
         // If errorsFromResponse is array then it is definitely after API response
         if ( errorsFromResponse instanceof Array && errorsFromResponse.length > 0 ) {
             let errorMessages = errorsFromResponse.map(d => d.message);
             if (errorMessages.length > 0) {
                 // Errors setted
-                setErrorMsg(errorMessages.join("\n"))
+                setLoader(false);
+                setErrorMsg(errorMessages.join("\n"));
             }
         } else {
-            setErrorMsg(false)
+            setErrorMsg(false);
+            // Showing Success Message
+            setCustomSuccessMsg(successMsg)
         }
+
         if(error) {
             setErrorMsg("Limit exceeded. Please try again later.")
         }
-        // Show loader
-        setLoader(loading);
-        // Showing Success Message
-        setCustomSuccessMsg(successMsg)
+
     }, [loading, errorsFromResponse, successMsg, error])
 
     if(showLoader) {

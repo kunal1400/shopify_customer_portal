@@ -3,14 +3,17 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import fileinput from 'bootstrap-fileinput';
 import 'bootstrap-fileinput/css/fileinput.min.css';
+import Modal from '../Modal';
 
 const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadStartTime }) => {
     let inputFileRef = useRef();
+    let [show, setShow] = useState(false);
     let [s3ServerUrls, setS3ServerUrls] = useState([]);
     
     // Initial configuration for fileinput plugin
     const fileInputConfig = {
         uploadUrl: `${process.env.REACT_APP_BACKEND_URL}/upload_file`,
+        showClose: false,
         uploadAsync: true,
         minFileCount: 1,
         // maxFileCount: 72,
@@ -20,6 +23,8 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadSt
         initialPreviewCount: true,
         showUpload: true,
         fileActionSettings: {
+            showUpload: false,
+            showDownload: false,
             showZoom: false,
             showDrag: false
         },        
@@ -76,12 +81,25 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadSt
             filebatchuploadcomplete(extra, s3ServerUrls);            
         }).on('filebatchuploadsuccess', function (event, data) {
             // console.log('File Batch Upload Success', event, data);
-        })
+        }).on('filebatchselected', function(event, files) {
+            console.log('File batch selected triggered');
+        });
     }, [initialPreview])
 
-    return <div>
-        <input type="file" multiple name="customers_uploaded_files[]" className='fileInput' ref={inputFileRef} />
-    </div>
+    return <>
+        <div>
+            <input type="file" multiple name="customers_uploaded_files[]" className='fileInput' ref={inputFileRef} />            
+        </div>
+        <div>
+            <button onClick={() => setShow(true)}>Open Modal</button>
+        </div>
+        {/* <Modal show={show} onClose={() => setShow(false)}>
+            <div className="my-5 content d-flex justify-content-center">
+                <button onClick={() => setShow(false)} className='btn btn-primary mx-2'>Edit / Add Images</button>
+                <button onClick={() => $(inputFileRef.current).fileinput('upload')}} className='btn btn-primary mx-2'>Go to Cart</button>
+            </div>
+        </Modal> */}
+    </>
 }
 
 BootstrapFileUpload.propTypes = {

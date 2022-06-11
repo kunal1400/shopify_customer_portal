@@ -8,6 +8,7 @@ import PasswordReset from "../ForgotPassword/UpdatePasswordByUrl";
 import { EmailSent as ForgotPasswordLinkSent } from "../ForgotPassword/EmailSent";
 import SectionWithSidebar from "../Customer";
 import { EditItem } from "../Items/EditItem";
+import VerifyAccount from "../VerifyAccount";
 
 function Layout() {
     return (
@@ -23,6 +24,7 @@ function Layout() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/forgot-password-link-sent" element={<ForgotPasswordLinkSent />} />                
                 <Route path="/reset-password" element={<PasswordReset />} />                
+                <Route path="/account-activate" element={<VerifyAccount />} />                
             </Routes>
         </BrowserRouter>
     )

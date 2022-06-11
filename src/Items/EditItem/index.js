@@ -29,7 +29,11 @@ export const EditItem = () => {
             <h6><b>Add/Remove Item</b></h6>
             <div className='row'>
                 {/* <AllCards items={images} /> */}
-                <BootstrapFileUpload filebatchuploadcomplete={afterUpload} initialPreview={images} uploadStartTime={folderPath} />
+                <BootstrapFileUpload 
+                    filebatchuploadcomplete={afterUpload} 
+                    initialPreview={images} 
+                    uploadStartTime={folderPath} 
+                />
             </div>
         </div>
     }
