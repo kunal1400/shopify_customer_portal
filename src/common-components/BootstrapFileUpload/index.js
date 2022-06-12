@@ -3,11 +3,16 @@ import $ from 'jquery';
 import PropTypes from 'prop-types';
 import fileinput from 'bootstrap-fileinput';
 import 'bootstrap-fileinput/css/fileinput.min.css';
-import Modal from '../Modal';
 
-const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadStartTime }) => {
-    let inputFileRef = useRef();
-    let [show, setShow] = useState(false);
+const BootstrapFileUpload = ({ 
+    filebatchuploadcomplete, 
+    initialPreview, 
+    uploadStartTime, 
+    filebatchselected, 
+    filebeforeload,
+    startUpload=false 
+}) => {
+    let inputFileRef = useRef();    
     let [s3ServerUrls, setS3ServerUrls] = useState([]);
     
     // Initial configuration for fileinput plugin
@@ -56,6 +61,12 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadSt
         setInitialPreview()
     }
 
+    useEffect(() => {
+        if( startUpload && startUpload === true ) {
+            $(inputFileRef.current).fileinput('upload');
+        }
+    }, [startUpload])    
+
     // componentDidMount 
     useEffect(() => {
         $(inputFileRef.current).fileinput(fileInputConfig)
@@ -82,29 +93,26 @@ const BootstrapFileUpload = ({ filebatchuploadcomplete, initialPreview, uploadSt
         }).on('filebatchuploadsuccess', function (event, data) {
             // console.log('File Batch Upload Success', event, data);
         }).on('filebatchselected', function(event, files) {
-            console.log('File batch selected triggered');
-        });
+            // console.log('File batch selected triggered');
+            filebatchselected(event, files)
+        }).on('filebeforeload', function(event, file, index, reader) {
+            const a = filebeforeload(event, file, index, reader, "change");
+            console.log(a)
+            return a;
+        });;
     }, [initialPreview])
 
     return <>
         <div>
             <input type="file" multiple name="customers_uploaded_files[]" className='fileInput' ref={inputFileRef} />            
-        </div>
-        <div>
-            <button onClick={() => setShow(true)}>Open Modal</button>
-        </div>
-        {/* <Modal show={show} onClose={() => setShow(false)}>
-            <div className="my-5 content d-flex justify-content-center">
-                <button onClick={() => setShow(false)} className='btn btn-primary mx-2'>Edit / Add Images</button>
-                <button onClick={() => $(inputFileRef.current).fileinput('upload')}} className='btn btn-primary mx-2'>Go to Cart</button>
-            </div>
-        </Modal> */}
+        </div>        
     </>
 }
 
 BootstrapFileUpload.propTypes = {
     filebatchuploadcomplete: PropTypes.func.isRequired,
-    uploadStartTime: PropTypes.string.isRequired
+    uploadStartTime: PropTypes.string.isRequired,
+    filebeforeload: PropTypes.func.isRequired
 }
 
 export default BootstrapFileUpload;

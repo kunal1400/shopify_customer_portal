@@ -65,5 +65,8 @@
 .pricing-item-span {
     line-height: 2;
     font-weight: bold;
+}
 
+.form-control.required {
+    border: 1px solid red;
 }
