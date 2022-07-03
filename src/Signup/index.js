@@ -64,44 +64,45 @@ export function Signup({cssClasses}) {
                 const responseData = await createCustomer({ variables: { input: {...customerData, phone: phoneNumber} } })
     
                 // Extracting the API response data
-                let { customer, customerUserErrors } = responseData.data.customerCreate;                
-                const accountInviteResponse = await sendAccountInvite(customer.id);
-                console.log(customer, accountInviteResponse, "+customer+")
+                let { customer, customerUserErrors } = responseData.data.customerCreate;
 
-                // setErrorMsg(customerUserErrors);
-                // if(customer) {
-                //     const customerAccessTokenResponse = await getAccessToken({ 
-                //         variables: { 
-                //             input: { 
-                //                 email: customerData.email, 
-                //                 password: customerData.password 
-                //             } 
-                //         } 
-                //     });
+                // sending custom email verification from sendgrid to customers
+                await sendAccountInvite(customer);
+
+                setErrorMsg(customerUserErrors);
+                if(customer) {
+                    const customerAccessTokenResponse = await getAccessToken({ 
+                        variables: { 
+                            input: { 
+                                email: customerData.email, 
+                                password: customerData.password 
+                            } 
+                        } 
+                    });
                     
-                //     // Catching all errors and showing it in UI
-                //     if (customerAccessTokenResponse && 
-                //         customerAccessTokenResponse.data &&
-                //         customerAccessTokenResponse.data.customerAccessTokenCreate &&
-                //         customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors instanceof Array && 
-                //         customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors.length > 0
-                //         ) {
-                //         setErrorMsg(customerUserErrors);
-                //     }
-                //     else if (customerAccessTokenResponse && 
-                //         customerAccessTokenResponse.data &&
-                //         customerAccessTokenResponse.data.customerAccessTokenCreate &&
-                //         customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken
-                //         ) {
-                //         saveCustomerToken(customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken);
+                    // Catching all errors and showing it in UI
+                    if (customerAccessTokenResponse && 
+                        customerAccessTokenResponse.data &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors instanceof Array && 
+                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors.length > 0
+                        ) {
+                        setErrorMsg(customerUserErrors);
+                    }
+                    else if (customerAccessTokenResponse && 
+                        customerAccessTokenResponse.data &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate &&
+                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken
+                        ) {
+                        saveCustomerToken(customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken);
 
-                //         // After login redirect user to home page
-                //         navigate("/customer/order-history");
-                //     }
-                //     else {
-                //         console.log("Some error in", customerAccessTokenResponse)
-                //     }
-                // }
+                        // After login redirect user to home page
+                        navigate("/customer/order-history");
+                    }
+                    else {
+                        console.log("Some error in", customerAccessTokenResponse)
+                    }
+                }
             }
             catch (e) {
                 console.log(e, "error")

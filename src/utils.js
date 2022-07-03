@@ -15,6 +15,13 @@ export const saveCustomerToken = (customerAccessToken) => {
 }
 
 /**
+ * This will save the token in cookies
+ */
+ export const saveCustomer = (customer) => {
+    cookies.set("_shopify_current_user", customer, { path: '/' });
+}
+
+/**
  * This will return the token from cookies
  */
 export const getCustomerToken = () => {

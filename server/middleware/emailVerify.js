@@ -1,6 +1,37 @@
 const axios = require('axios').default;
 const sg = require('./sendgrid');
 
+
+/**
+ * This function will generate the data for email verification
+ * @param {*} isVerified 
+ * @returns 
+ */
+ const generateFieldForEmailVerification = (isVerified) => {
+    return {
+        key: "is_verified",
+        value: isVerified,
+        type: "boolean",
+        namespace: "global"
+    }
+}
+
+
+/**
+ * This function will generate the data for email verification
+ * @param {*} isVerified 
+ * @returns 
+ */
+ const generateFieldForVerificationCode = (code) => {
+    return {
+        key: "email_verification_code",
+        value: code,
+        type: "number_integer",
+        namespace: "global"
+    }
+}
+
+
 /**
  * This will extract the customer id from encoded base gql id
  * 
@@ -134,36 +165,23 @@ const handleSendEmailVerification = async ( customer_gql_id, customerEmail ) => 
     }
 }
 
-/**
- * This function will generate the data for email verification
- * @param {*} isVerified 
- * @returns 
- */
-const generateFieldForEmailVerification = (isVerified) => {
-    return {
-        key: "is_verified",
-        value: isVerified,
-        type: "boolean",
-        namespace: "global"
-    }
-}
-
 
 /**
- * This function will generate the data for email verification
- * @param {*} isVerified 
+ * This is the main function handling the route.
+ * 
+ * @param {*} customer_gql_id 
  * @returns 
  */
- const generateFieldForVerificationCode = (code) => {
-    return {
-        key: "email_verification_code",
-        value: code,
-        type: "number_integer",
-        namespace: "global"
-    }
+ const handleGetMetFields = async ( customer_gql_id ) => {
+    // #1 - Getting all meta fields of the user
+    const customerId = getCustomerId(customer_gql_id);
+    const { metafields } = await getCustomerMetaField( customerId );
+    return metafields;
 }
+
 
 module.exports = {
     handleSendEmailVerification,
-    handleVerifyEmail
+    handleVerifyEmail,
+    handleGetMetFields
 }

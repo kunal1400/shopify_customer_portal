@@ -166,6 +166,20 @@ app.get('/verify', async (req, res) => {
 })
 
 
+// Getting user meta field
+app.get('/get_customer_meta_fields', async (req, res) => {    
+    const { gql_customer_id } = req.query;
+
+    if( !gql_customer_id ) {
+        res.send("gql_customer_id is required");
+        return;
+    }
+
+    const verificationResponse = await emailVerify.handleGetMetFields(gql_customer_id);
+    res.send({status: true, metafields: verificationResponse});
+})
+
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
