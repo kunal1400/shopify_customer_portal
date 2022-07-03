@@ -52,8 +52,8 @@ export default function VerifyAccount({customer}) {
                     let { customer, customerUserErrors } = responseData.data.customerActivateByUrl;
                     setErrorMsg(customerUserErrors);
                     if(customer) {
-                        setCustomerSuccessMsg("Your account has been successfully verified.");
-                        navigate("/");
+                        setCustomerSuccessMsg("Your account has been successfully verified and you can login now.");
+                        // navigate("/");
                     }
                 }
                 catch (e) {

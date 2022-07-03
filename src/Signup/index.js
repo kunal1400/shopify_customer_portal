@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInput from 'react-phone-number-input';
-import { CREATE_CUSTOMER } from "./API";
+import { CREATE_CUSTOMER, sendAccountInvite } from "./API";
 import { GET_CUSTOMER_ACCESS_TOKEN } from "../Login/API";
 import { HandleApolloClientErrors } from "../common-components/alert";
 import { FormLogo } from "../common-components/logos";
@@ -64,41 +64,44 @@ export function Signup({cssClasses}) {
                 const responseData = await createCustomer({ variables: { input: {...customerData, phone: phoneNumber} } })
     
                 // Extracting the API response data
-                let { customer, customerUserErrors } = responseData.data.customerCreate;
-                setErrorMsg(customerUserErrors);
-                if(customer) {
-                    const customerAccessTokenResponse = await getAccessToken({ 
-                        variables: { 
-                            input: { 
-                                email: customerData.email, 
-                                password: customerData.password 
-                            } 
-                        } 
-                    });
-                    
-                    // Catching all errors and showing it in UI
-                    if (customerAccessTokenResponse && 
-                        customerAccessTokenResponse.data &&
-                        customerAccessTokenResponse.data.customerAccessTokenCreate &&
-                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors instanceof Array && 
-                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors.length > 0
-                        ) {
-                        setErrorMsg(customerUserErrors);
-                    }
-                    else if (customerAccessTokenResponse && 
-                        customerAccessTokenResponse.data &&
-                        customerAccessTokenResponse.data.customerAccessTokenCreate &&
-                        customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken
-                        ) {
-                        saveCustomerToken(customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken);
+                let { customer, customerUserErrors } = responseData.data.customerCreate;                
+                const accountInviteResponse = await sendAccountInvite(customer.id);
+                console.log(customer, accountInviteResponse, "+customer+")
 
-                        // After login redirect user to home page
-                        navigate("/customer/order-history");
-                    }
-                    else {
-                        console.log("Some error in", customerAccessTokenResponse)
-                    }
-                }
+                // setErrorMsg(customerUserErrors);
+                // if(customer) {
+                //     const customerAccessTokenResponse = await getAccessToken({ 
+                //         variables: { 
+                //             input: { 
+                //                 email: customerData.email, 
+                //                 password: customerData.password 
+                //             } 
+                //         } 
+                //     });
+                    
+                //     // Catching all errors and showing it in UI
+                //     if (customerAccessTokenResponse && 
+                //         customerAccessTokenResponse.data &&
+                //         customerAccessTokenResponse.data.customerAccessTokenCreate &&
+                //         customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors instanceof Array && 
+                //         customerAccessTokenResponse.data.customerAccessTokenCreate.customerUserErrors.length > 0
+                //         ) {
+                //         setErrorMsg(customerUserErrors);
+                //     }
+                //     else if (customerAccessTokenResponse && 
+                //         customerAccessTokenResponse.data &&
+                //         customerAccessTokenResponse.data.customerAccessTokenCreate &&
+                //         customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken
+                //         ) {
+                //         saveCustomerToken(customerAccessTokenResponse.data.customerAccessTokenCreate.customerAccessToken);
+
+                //         // After login redirect user to home page
+                //         navigate("/customer/order-history");
+                //     }
+                //     else {
+                //         console.log("Some error in", customerAccessTokenResponse)
+                //     }
+                // }
             }
             catch (e) {
                 console.log(e, "error")
